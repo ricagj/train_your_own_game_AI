@@ -48,21 +48,33 @@ def get_xywh(img):
 
 # ---------- 以下需要修改 ----------
 
-def get_state_1(img):    # 自己改
-    return 0
+def get_Self_HP(img):
+    img = roi(img, x=48, x_w=307, y=406, y_h=410)
+    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
+    value = canny.argmax(axis=-1)
+    return np.median(value)
 
-def get_state_2(img):    # 自己改
-    return 0
+def get_Self_Posture(img):
+    img = roi(img, x=402, x_w=491, y=388, y_h=390)
+    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
+    value = canny.argmax(axis=-1)
+    return np.median(value)
 
-def get_state_3(img):    # 自己改
-    return 0
+def get_Target_HP(img):
+    img = roi(img, x=48, x_w=219, y=40, y_h=45)
+    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
+    value = canny.argmax(axis=-1)
+    return np.median(value)
 
-def get_state_4(img):    # 自己改
-    return 0
+def get_Target_Posture(img):
+    img = roi(img, x=402, x_w=554, y=27, y_h=31)
+    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
+    value = canny.argmax(axis=-1)
+    return np.median(value)
 
 # 不够就自己添加，多了就自己删除
 
 def get_status(img):
-    return get_state_1(img), get_state_2(img), get_state_3(img), get_state_4(img)    # 这里也要改成相应的函数名
+    return get_Self_HP(img), get_Self_Posture(img), get_Target_HP(img), get_Target_Posture(img)
 
 # ---------- 以上需要修改 ----------

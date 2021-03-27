@@ -167,24 +167,24 @@ dk = {
 
 # ---------- 以下需要修改或补充 ----------
 
-def W(delay=1):    # 移动 前
-    PressKey(dk['W'])
+def J(delay=0.05):    # 攻击
+    PressKey(dk['J'])
     time.sleep(delay)
-    ReleaseKey(dk['W'])
+    ReleaseKey(dk['J'])
 
-def S(delay=1):    # 移动 后
-    PressKey(dk['S'])
+def K(delay=0.05):    # 防御
+    PressKey(dk['K'])
     time.sleep(delay)
-    ReleaseKey(dk['S'])
+    ReleaseKey(dk['K'])
 
-def A(delay=1):    # 移动 左
-    PressKey(dk['A'])
+def LSHIFT(delay=0.05):    # 垫步
+    PressKey(dk['LSHIFT'])
     time.sleep(delay)
-    ReleaseKey(dk['A'])
+    ReleaseKey(dk['LSHIFT'])
 
-def D(delay=1):    # 移动 右
-    PressKey(dk['D'])
+def SPACE(delay=0.05):    # 跳跃
+    PressKey(dk['SPACE'])
     time.sleep(delay)
-    ReleaseKey(dk['D'])
+    ReleaseKey(dk['SPACE'])
 
 # ---------- 以上需要修改或补充 ----------

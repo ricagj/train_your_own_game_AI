@@ -12,7 +12,7 @@ if gpus:
     print(tf.config.experimental.get_device_details(gpus[0])['device_name'])
 
 # ---------- 以下根据 control_keyboard_keys.py 里定义的函数来导入 ----------
-from game_player.control_keyboard_keys import W, S, A, D
+from game_player.control_keyboard_keys import J, K, LSHIFT, SPACE
 # ---------- 以上根据 control_keyboard_keys.py 里定义的函数来导入 ----------
 
 # ---*---
@@ -88,11 +88,11 @@ class DoubleDQN:
 
         # -------------------- 以下务必自己修改 --------------------
         # 第 1 层 卷积层和最大池化层
-        conv_1 = tf.keras.layers.Conv2D(filters=1, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(Input)
+        conv_1 = tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(Input)
         pool_1 = tf.keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='same')(conv_1)
         
         # 第 2 层 卷积层和最大池化层
-        conv_2 = tf.keras.layers.Conv2D(filters=1, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(pool_1)
+        conv_2 = tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(pool_1)
         pool_2 = tf.keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='same')(conv_2)
 
         # 你要是觉得不够，可以自己增加卷积层和池化层，觉得太多了就删掉
@@ -101,11 +101,11 @@ class DoubleDQN:
         flat = tf.keras.layers.Flatten()(pool_2)
 
         # 第 1 层 全连接层
-        dense_1 = tf.keras.layers.Dense(1, activation=tf.nn.relu)(flat)
+        dense_1 = tf.keras.layers.Dense(16, activation=tf.nn.relu)(flat)
         dense_1 = tf.keras.layers.BatchNormalization()(dense_1)
 
         # 第 2 层 全连接层
-        dense_2 = tf.keras.layers.Dense(1, activation=tf.nn.relu)(dense_1)
+        dense_2 = tf.keras.layers.Dense(16, activation=tf.nn.relu)(dense_1)
         dense_2 = tf.keras.layers.BatchNormalization()(dense_2)
 
         output = dense_2
@@ -150,23 +150,22 @@ class DoubleDQN:
         """
         将所有的动作都编码成数字，并且数字满足从零开始和正整数的要求。
         例如
-            W 移动 前 0
-            S 移动 后 1
-            A 移动 左 2
-            D 移动 右 3
+            J      攻击 0
+            K      弹反 1
+            LSHIFT 垫步 2
+            SPACE  跳跃 3
         """
 
         # 执行动作
         if   action == 0:
-            W()
+            J()
         elif action == 1:
-            S()
+            K()
         elif action == 2:
-            A()
+            LSHIFT()
         elif action == 3:
-            D()
-        elif action == 4:    # 等你添加，不需要可以删除
-            pass
+            SPACE()
+
         # 不够可以添加，注意，一定要是正整数，还要和上一个相邻
         # ---------- 以上根据 control_keyboard_keys.py 里定义的函数来修改 ----------
 

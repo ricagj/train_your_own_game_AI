@@ -1,12 +1,15 @@
-## 训练属于自己的游戏AI
+## 训练属于自己的游戏AI v0.2.0
 
-# 正在调试中...
-# 正在调试中...
-# 正在调试中...
+# **正在更新中...**
 
-# 正在更新中...
-# 正在修改 pysekiro_with_RL 的代码，使之成为本项目的第一个实例，也是第一个示例
-# 下一个实例是：Muse Dash
+## 第 1 个实例 《只狼：影逝二度》
+
+[代码](https://github.com/ricagj/train_your_own_game_AI/tree/main/pysekiro_with_RL)
+[教程](https://github.com/ricagj/train_your_own_game_AI/blob/main/pysekiro_with_RL/sekiro.ipynb)
+
+## 第 2 个实例 《Muse Dash》
+
+**暂未开始**
 
 ## 项目结构
 
