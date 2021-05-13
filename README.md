@@ -1,12 +1,12 @@
 ## 训练属于自己的游戏AI v0.3.0
 
 ## 本次更新
-尝试使用预训练模型MobileNetV3Small
+只狼专用代码更新，通用代码未更新
 
 ## 第 1 个实例 《只狼：影逝二度》
 
-[代码](https://github.com/ricagj/train_your_own_game_AI/tree/main/pysekiro_with_RL)  
-[教程](https://github.com/ricagj/train_your_own_game_AI/blob/main/pysekiro_with_RL/sekiro.ipynb)
+[v0.2.0 代码](https://github.com/ricagj/train_your_own_game_AI/tree/d0a553b53559ff7cf6decea9252a139013a70746/pysekiro_with_RL)  
+[v0.2.0 教程](https://github.com/ricagj/train_your_own_game_AI/blob/d0a553b53559ff7cf6decea9252a139013a70746/pysekiro_with_RL/sekiro.ipynb)
 
 ## 第 2 个实例 《Muse Dash》
 

@@ -165,8 +165,6 @@ dk = {
     "SLASH":        0x35,       "SLA":      0x35,
 }
 
-# ---------- 以下需要修改或补充 ----------
-
 def J(delay=0.05):    # 攻击
     PressKey(dk['J'])
     time.sleep(delay)
@@ -182,9 +180,32 @@ def LSHIFT(delay=0.05):    # 垫步
     time.sleep(delay)
     ReleaseKey(dk['LSHIFT'])
 
-def SPACE(delay=0.05):    # 跳跃
-    PressKey(dk['SPACE'])
+def Lock_On(delay=0.2):
+    PressKey(dk['Y'])
     time.sleep(delay)
-    ReleaseKey(dk['SPACE'])
+    ReleaseKey(dk['Y'])
 
-# ---------- 以上需要修改或补充 ----------
+def Reset_Self_HP(delay=0.2):
+    PressKey(dk['NUMPAD1'])
+    time.sleep(delay)
+    ReleaseKey(dk['NUMPAD1'])
+    K()
+    PressKey(dk['NUMPAD1'])
+    time.sleep(delay)
+    ReleaseKey(dk['NUMPAD1'])
+
+def Waiting_to_learn(learn, delay=0.2):
+    def w(*args, **kwargs):
+        PressKey(dk['NUMPAD2'])
+        time.sleep(delay)
+        ReleaseKey(dk['NUMPAD2'])
+
+        Reset_Self_HP()
+
+        learn(*args, **kwargs)
+
+        PressKey(dk['NUMPAD2'])
+        time.sleep(delay)
+        ReleaseKey(dk['NUMPAD2'])
+
+    return w

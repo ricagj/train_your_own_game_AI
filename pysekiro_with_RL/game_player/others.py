@@ -46,35 +46,100 @@ def get_xywh(img):
 
     print(f'\n x={x}, x_w={x_w}, y={y}, y_h={y_h}\n')
 
-# ---------- 以下需要修改 ----------
+# ---*---
 
+# debug
+
+# import cv2
+# from game_player.grab_screen import get_game_screen
+# from game_player.others import roi
+# from game_player.detect_keyboard_keys import key_check
+# import numpy as np
+# Count = dict()
+# paused = True
+# print("Ready!")
+# while True:
+#     keys = key_check()
+#     if paused:
+#         if 'T' in keys:
+#             paused = False
+#     else:
+#         img = get_game_screen()
+#         Self_Posture = get_Self_Posture(img)
+#         print(f'\r {str(Self_Posture):<10}', end='')
+#         if 'P' in keys:
+#             break
+# sorted(Count.items(), key = lambda kv:(kv[1], kv[0]))
+
+# ---*---
+
+# 获取自身生命
 def get_Self_HP(img):
-    img = roi(img, x=48, x_w=307, y=406, y_h=410)
-    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
-    value = canny.argmax(axis=-1)
-    return np.median(value)
+    img_roi = roi(img, x=48, x_w=305, y=409, y_h=409+1)
 
+    b, g ,r =cv2.split(img_roi)    # 颜色通道分离
+
+    retval, img_th = cv2.threshold(g, 50, 255, cv2.THRESH_TOZERO)             # 图像阈值处理，像素点的值低于50的设置为0
+    retval, img_th = cv2.threshold(img_th, 70, 255, cv2.THRESH_TOZERO_INV)    # 图像阈值处理，像素点的值高于70的设置为0
+
+    target_img = img_th[0]
+    if 0 in target_img:
+        Self_HP = np.argmin(target_img)
+    else:
+        Self_HP = len(target_img)
+
+    return Self_HP
+
+# 获取自身架势
 def get_Self_Posture(img):
-    img = roi(img, x=402, x_w=491, y=388, y_h=390)
-    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
-    value = canny.argmax(axis=-1)
-    return np.median(value)
+    # global Count
+    img_roi = roi(img, x=401, x_w=491, y=389, y_h=389+1)
+    b, g ,r =cv2.split(img_roi)    # 颜色通道分离
+    
+    key_pixel = r[0][0]
+    if key_pixel in [159, 160, 161, 162, 163, 254, 255]:
+        # Count[key_pixel] = Count.get(key_pixel, 0) + 1
+        canny = cv2.Canny(cv2.GaussianBlur(r,(3,3),0), 0, 100)
+        Self_Posture = np.argmax(canny)
+    else:
+    	Self_Posture = 0
 
+    return Self_Posture
+
+# 获取目标生命
 def get_Target_HP(img):
-    img = roi(img, x=48, x_w=219, y=40, y_h=45)
-    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
-    value = canny.argmax(axis=-1)
-    return np.median(value)
+    img_roi = roi(img, x=48, x_w=216, y=41, y_h=41+1)
 
+    b, g ,r =cv2.split(img_roi)    # 颜色通道分离
+
+    retval, img_th = cv2.threshold(g, 25, 255, cv2.THRESH_TOZERO)             # 图像阈值处理，像素点的值低于25的设置为0
+    retval, img_th = cv2.threshold(img_th, 70, 255, cv2.THRESH_TOZERO_INV)    # 图像阈值处理，像素点的值高于70的设置为0
+
+    target_img = img_th[0]
+    if 0 in target_img:
+        Target_HP = np.argmin(target_img)
+    else:
+        Target_HP = len(target_img)
+    
+    return Target_HP
+
+# 获取目标架势
 def get_Target_Posture(img):
-    img = roi(img, x=402, x_w=554, y=27, y_h=31)
-    canny = cv2.Canny(cv2.GaussianBlur(img,(3,3),0), 0, 100)
-    value = canny.argmax(axis=-1)
-    return np.median(value)
+#     global Count
+    img_roi = roi(img, x=401, x_w=556, y=29, y_h=29+1)
+    b, g ,r =cv2.split(img_roi)    # 颜色通道分离
 
-# 不够就自己添加，多了就自己删除
+    key_pixel = r[0][0]
+    if key_pixel in [190, 255] + list(range(197, 220+1)):
+#         Count[key_pixel] = Count.get(key_pixel, 0) + 1
+        canny = cv2.Canny(cv2.GaussianBlur(r,(3,3),0), 0, 100)
+        Target_Posture = np.argmax(canny)
+    else:
+        Target_Posture = 0
+
+    return Target_Posture
+
+# ---*---
 
 def get_status(img):
-    return get_Self_HP(img), get_Self_Posture(img), get_Target_HP(img), get_Target_Posture(img)
-
-# ---------- 以上需要修改 ----------
+    return np.array([get_Self_HP(img), get_Self_Posture(img), get_Target_HP(img), get_Target_Posture(img)])
