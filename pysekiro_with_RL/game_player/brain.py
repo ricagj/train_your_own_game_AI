@@ -84,41 +84,18 @@ class DoubleDQN:
 
     # 评估网络和目标网络的构建方法
     def build_network(self):
-        Input = tf.keras.Input(shape=[self.in_height, self.in_width, self.in_channels])
+        input_shape = [self.in_height, self.in_width, self.in_channels]
 
-        # -------------------- 以下务必自己修改 --------------------
-        # 第 1 层 卷积层和最大池化层
-        conv_1 = tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(Input)
-        pool_1 = tf.keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='same')(conv_1)
-        
-        # 第 2 层 卷积层和最大池化层
-        conv_2 = tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation=tf.nn.relu)(pool_1)
-        pool_2 = tf.keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='same')(conv_2)
+        inputs = tf.keras.Input(shape=input_shape, dtype=tf.uint8)
+        x = tf.cast(inputs, tf.float32)
+        outputs = tf.keras.applications.MobileNetV3Small(input_shape=input_shape, weights=None, classes=self.outputs)(x)
 
-        # 你要是觉得不够，可以自己增加卷积层和池化层，觉得太多了就删掉
-        
-        # 扁平化层
-        flat = tf.keras.layers.Flatten()(pool_2)
-
-        # 第 1 层 全连接层
-        dense_1 = tf.keras.layers.Dense(16, activation=tf.nn.relu)(flat)
-        dense_1 = tf.keras.layers.BatchNormalization()(dense_1)
-
-        # 第 2 层 全连接层
-        dense_2 = tf.keras.layers.Dense(16, activation=tf.nn.relu)(dense_1)
-        dense_2 = tf.keras.layers.BatchNormalization()(dense_2)
-
-        output = dense_2
-        # -------------------- 以上务必自己修改 --------------------
-
-        # 输出层
-        output = tf.keras.layers.Dense(self.outputs, activation=tf.nn.softmax)(output)
-
-        model = tf.keras.Model(inputs=Input, outputs=output)
+        model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
         model.compile(
-            optimizer=tf.keras.optimizers.RMSprop(self.lr),    # 你觉得有更好的可以自己改
-            loss=tf.keras.losses.MeanSquaredError(),    # 你觉得有更好的可以自己改
+            optimizer=tf.keras.optimizers.Adam(self.lr),    # 你觉得有更好的可以自己改
+            loss=tf.keras.losses.CategoricalCrossentropy(),    # 你觉得有更好的可以自己改
+            metrics=[tf.keras.metrics.CategoricalAccuracy()]
         )
 
         if self.load_weights_path:

@@ -76,9 +76,9 @@ y   = 450 // 2 - 200    # 上 不小于0，小于 y_h
 y_h = 450 // 2 + 200    # 下不大于图像高度，例如 450，大于 y
 
 in_depth    = 1
-in_height   = 50    # 图像高度
-in_width    = 50    # 图像宽度
-in_channels = 1     # 颜色通道数量
+in_height   = 224    # 图像高度
+in_width    = 224    # 图像宽度
+in_channels = 3     # 颜色通道数量
 outputs = 4     # 动作数量
 lr = 0.001      # 学习率
 
@@ -151,7 +151,7 @@ class Agent:
             self.screens.append(get_game_screen())    # 先进先出，右进左出
 
     def img_processing(self, screens):
-        return np.array([cv2.resize(roi(cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY), x, x_w, y, y_h), (in_height, in_width)) for screen in screens])
+        return np.array([cv2.resize(roi(screen, x, x_w, y, y_h), (in_height, in_width)) for screen in screens])
 
     def round(self):
 
